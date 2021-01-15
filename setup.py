@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-   name='bt_ccxt_store_01',
+   name='bt_ccxt_store',
    version='1.0',
    description='A fork of Ed Bartosh\'s CCXT Store Work with some additions',
    url='https://github.com/RASM01/bt-ccxt-store',
