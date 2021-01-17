@@ -23,12 +23,20 @@ from __future__ import (absolute_import, division, print_function,
 
 import collections
 import json
+import os
 
 from backtrader import BrokerBase, OrderBase, Order
 from backtrader.position import Position
 from backtrader.utils.py3 import queue, with_metaclass
 
 from .ccxtstore import CCXTStore
+
+
+PRODUCTION = "PRODUCTION"
+DEVELOPMENT = "DEVELOPMENT"
+BINANCE = "BINANCE"
+ENV = os.getenv("ENVIRONMENT", DEVELOPMENT).upper()
+BROKER = os.getenv("BROKER", "undefined").upper()
 
 
 class CCXTOrder(OrderBase):
@@ -139,7 +147,10 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
         self.startingcash = self.store._cash
         self.startingvalue = self.store._value
 
-        self.use_order_params = True
+        running_in_production = ENV == PRODUCTION
+        broker_is_binance = BROKER == BINANCE
+
+        self.use_order_params = False if running_in_production and broker_is_binance else True
 
     def get_balance(self):
         self.store.get_balance()
