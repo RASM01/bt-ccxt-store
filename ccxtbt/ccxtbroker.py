@@ -32,11 +32,11 @@ from backtrader.utils.py3 import queue, with_metaclass
 from .ccxtstore import CCXTStore
 
 
-PRODUCTION = "production"
-DEVELOPMENT = "development"
-BINANCE = "binance"
-ENV = os.getenv("ENVIRONMENT", DEVELOPMENT)
-BROKER = os.getenv("BROKER", None)
+PRODUCTION = "PRODUCTION"
+DEVELOPMENT = "DEVELOPMENT"
+BINANCE = "BINANCE"
+ENV = os.getenv("ENVIRONMENT", DEVELOPMENT).upper()
+BROKER = os.getenv("BROKER", "undefined").upper()
 
 
 class CCXTOrder(OrderBase):
@@ -147,8 +147,8 @@ class CCXTBroker(with_metaclass(MetaCCXTBroker, BrokerBase)):
         self.startingcash = self.store._cash
         self.startingvalue = self.store._value
 
-        running_in_production = ENV.lower() == PRODUCTION
-        broker_is_binance = BROKER.lower() == BINANCE
+        running_in_production = ENV == PRODUCTION
+        broker_is_binance = BROKER == BINANCE
 
         self.use_order_params = False if running_in_production and broker_is_binance else True
 
